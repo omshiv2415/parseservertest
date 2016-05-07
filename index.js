@@ -3,6 +3,7 @@
 
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
+var ParseDashboard = require('parse-dashboard');
 var path = require('path');
 
 var databaseUri =  'mongodb://omshiv2415:viral2410@ds015962.mlab.com:15962/mobile_security'
@@ -21,12 +22,19 @@ var api = new ParseServer({
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   }
 });
+
+var dashboard = new ParseDashboard({
+    // Parse Dashboard settings
+});
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
 var app = express();
 
+app.use('/parse', api);
+
+app.use('/dashboard', dashboard);
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
